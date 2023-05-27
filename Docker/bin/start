@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Nom du container principal
+CONTAINER_NAME="Docker SQL Server"
+
+# Nettoyage de l'écran
+clear
+
+# Echo with figlet if exists
+if type "figlet" > /dev/null; then
+  figlet $CONTAINER_NAME
+else
+  echo $CONTAINER_NAME
+fi
+
+
+if [ -z "$1" ]
+  then
+		echo "Démarrage de tous les containers"
+		# Commande de lancement (avec lecture du fichier .env)
+    docker-compose --env-file .env up -d
+else
+	echo "Démarrage du container $@"
+  docker-compose --env-file .env up $@ -d
+fi
