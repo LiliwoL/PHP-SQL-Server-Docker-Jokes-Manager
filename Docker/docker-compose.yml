@@ -1,5 +1,6 @@
 version: '3.9'
 services:
+
   sqlserver:
     container_name: SQL-Server
     hostname: sql-server
@@ -12,8 +13,29 @@ services:
       SA_PASSWORD: "12345OHdf%e"
       MSSQL_SA_PASSWORD: "12345OHdf%e"
       MSSQL_PID: "Developer"
+    # Les données de la base seront ainsi persistantes
+    volumes:
+      - dbdata:/var/opt/mssql
     networks:
-      - sql-server
+      - jokes-manager-project
+
+  web:
+    container_name: Web-Server
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ../app:/var/www/html
+    depends_on:
+      - sqlserver
+    networks:
+      - jokes-manager-project
+
+volumes:
+  dbdata:
+  app:
 
 networks:
-  sql-server:
+  jokes-manager-project:

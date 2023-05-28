@@ -9,8 +9,27 @@ services:
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "12345OHdf%e"
+    # Les données de la base seront ainsi persistantes
+    volumes:
+      - dbdata:/var/opt/mssql
     networks:
       - sql-server
 
+  web:
+    container_name: Web-Server
+    image: php:8-apache
+    ports:
+      - "80:80"
+    volumes:
+      - app:/var/www/html
+    depends_on:
+      - sqlserver
+    networks:
+      - jokes-manager-project
+
+volumes:
+  dbdata:
+  app:
+
 networks:
-  sql-server:
+  jokes-manager-project:
